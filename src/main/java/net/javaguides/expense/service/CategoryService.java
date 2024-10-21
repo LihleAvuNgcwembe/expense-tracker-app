@@ -5,4 +5,6 @@ import net.javaguides.expense.dto.CategoryDto;
 public interface CategoryService {
 
     CategoryDto createCategory(CategoryDto categoryDto);
+
+    CategoryDto getCategoryId(Long categoryId);
 }
