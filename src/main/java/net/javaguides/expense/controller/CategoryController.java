@@ -49,4 +49,12 @@ public class CategoryController {
 
         return ResponseEntity.ok(category);
     }
+
+    // Build delete category by id REST API
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteCategory(@PathVariable("id") Long categoryId){
+       categoryService.deleteCategory(categoryId);
+
+       return ResponseEntity.ok("Record deleted successfully!");
+    }
 }

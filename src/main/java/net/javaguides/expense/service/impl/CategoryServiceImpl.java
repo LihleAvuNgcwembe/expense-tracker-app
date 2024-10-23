@@ -33,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto getCategoryId(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(()-> new RuntimeException("Category not found with id!" + categoryId));
+                .orElseThrow(()-> new RuntimeException("Category not found with id! " + categoryId));
         return CategoryMapper.mapToCategoryDto(category);
     }
 
@@ -50,12 +50,22 @@ public class CategoryServiceImpl implements CategoryService {
 
         // Get category entity from database by category id
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(()-> new RuntimeException("Category not found with id" + categoryId));
+                .orElseThrow(()-> new RuntimeException("Category not found with id! " + categoryId));
 
         // Update the category entity object and save into database table - categories
         category.setName(categoryDto.name());
         Category updatedCategory = categoryRepository.save(category); // perform update operation
 
         return CategoryMapper.mapToCategoryDto(updatedCategory);
+    }
+
+    @Override
+    public void deleteCategory(Long categoryId) {
+
+        // Check if category given exist in database
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(()-> new RuntimeException("Category not found with id! " + categoryId));
+
+        categoryRepository.delete(category);
     }
 }
