@@ -41,7 +41,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         // Get expense entity from database using expense id
         Expense expense = expenseRepository.findById(expenseId)
-                .orElseThrow(()-> new RuntimeException("Expense not found with id" +  expenseId));
+                .orElseThrow(()-> new RuntimeException("Expense not found with id: " +  expenseId));
 
         // Convert expense entity to ExpenseDto
         return ExpenseMapper.mapToExpenseDto(expense);
@@ -62,7 +62,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     public ExpenseDto updateExpense(Long expenseId, ExpenseDto expenseDto) {
 
         Expense expense = expenseRepository.findById(expenseId)
-                .orElseThrow(()-> new RuntimeException("Expense not found with id" + expenseId));
+                .orElseThrow(()-> new RuntimeException("Expense not found with id: " + expenseId));
 
         // Update amount
         expense.setAmount(expenseDto.amount());
@@ -75,7 +75,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             // Get category entity by id
             Category category = categoryRepository.findById(expenseDto.categoryDto().id())
                     .orElseThrow(()-> new RuntimeException(
-                            "Category not found with id" + expenseDto.categoryDto().id()));
+                            "Category not found with id: " + expenseDto.categoryDto().id()));
 
             expense.setCategory(category);
         }
@@ -85,5 +85,17 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         // Convert expense entity to ExpenseDto
         return ExpenseMapper.mapToExpenseDto(savedExpense);
+    }
+
+    @Override
+    public void deleteExpense(Long expenseId) {
+
+        // Get expense from the database by id. If not exist
+        // throw the runtime exception
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(()-> new RuntimeException("Expense not found with id: " + expenseId));
+
+        expenseRepository.delete(expense);
+
     }
 }
