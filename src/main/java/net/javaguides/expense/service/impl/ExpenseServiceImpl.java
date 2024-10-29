@@ -8,6 +8,9 @@ import net.javaguides.expense.repository.ExpenseRepository;
 import net.javaguides.expense.service.ExpenseService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @AllArgsConstructor
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
@@ -37,5 +40,16 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         // Convert expense entity to ExpenseDto
         return ExpenseMapper.mapToExpenseDto(expense);
+    }
+
+    @Override
+    public List<ExpenseDto> getAllExpenses() {
+
+        List<Expense> expenses = expenseRepository.findAll();
+
+        return expenses.stream()
+                .map((expense) -> ExpenseMapper.mapToExpenseDto(expense))
+                .collect(Collectors.toList());
+
     }
 }

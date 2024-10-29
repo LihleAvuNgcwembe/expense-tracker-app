@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/expenses") // Base URI
@@ -31,6 +33,15 @@ public class ExpenseController {
         ExpenseDto expense = expenseService.getExpenseById(expenseId);
 
         return ResponseEntity.ok(expense);
+    }
+
+    // Build get all expenses REST API
+    @GetMapping
+    public ResponseEntity<List<ExpenseDto>> getAllExpenses(){
+
+        List<ExpenseDto> expenses = expenseService.getAllExpenses();
+
+        return ResponseEntity.ok(expenses);
     }
 
 }
