@@ -2,8 +2,10 @@ package net.javaguides.expense.service.impl;
 
 import lombok.AllArgsConstructor;
 import net.javaguides.expense.dto.ExpenseDto;
+import net.javaguides.expense.entity.Category;
 import net.javaguides.expense.entity.Expense;
 import net.javaguides.expense.mapper.ExpenseMapper;
+import net.javaguides.expense.repository.CategoryRepository;
 import net.javaguides.expense.repository.ExpenseRepository;
 import net.javaguides.expense.service.ExpenseService;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,9 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     // Inject ExpenseRepository
     private ExpenseRepository expenseRepository;
+
+    // InjectCategoryRepository
+    private CategoryRepository categoryRepository;
 
     @Override
     public ExpenseDto createExpense(ExpenseDto expenseDto) {
@@ -51,5 +56,34 @@ public class ExpenseServiceImpl implements ExpenseService {
                 .map((expense) -> ExpenseMapper.mapToExpenseDto(expense))
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public ExpenseDto updateExpense(Long expenseId, ExpenseDto expenseDto) {
+
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(()-> new RuntimeException("Expense not found with id" + expenseId));
+
+        // Update amount
+        expense.setAmount(expenseDto.amount());
+
+        // Update date
+        expense.setExpenseDate(expenseDto.expenseDate());
+
+        // Update category
+        if(expenseDto.categoryDto() != null){
+            // Get category entity by id
+            Category category = categoryRepository.findById(expenseDto.categoryDto().id())
+                    .orElseThrow(()-> new RuntimeException(
+                            "Category not found with id" + expenseDto.categoryDto().id()));
+
+            expense.setCategory(category);
+        }
+
+        // update expense entity
+        Expense savedExpense = expenseRepository.save(expense);
+
+        // Convert expense entity to ExpenseDto
+        return ExpenseMapper.mapToExpenseDto(savedExpense);
     }
 }
