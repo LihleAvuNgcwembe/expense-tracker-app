@@ -3,6 +3,7 @@ package net.javaguides.expense.service.impl;
 import lombok.AllArgsConstructor;
 import net.javaguides.expense.dto.CategoryDto;
 import net.javaguides.expense.entity.Category;
+import net.javaguides.expense.exceptions.ResourceNotFoundException;
 import net.javaguides.expense.mapper.CategoryMapper;
 import net.javaguides.expense.repository.CategoryRepository;
 import net.javaguides.expense.service.CategoryService;
@@ -33,7 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto getCategoryId(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(()-> new RuntimeException("Category not found with id! " + categoryId));
+                .orElseThrow(()-> new ResourceNotFoundException("Category not found with id: " + categoryId));
         return CategoryMapper.mapToCategoryDto(category);
     }
 
@@ -50,7 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         // Get category entity from database by category id
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(()-> new RuntimeException("Category not found with id! " + categoryId));
+                .orElseThrow(()-> new ResourceNotFoundException("Category not found with id: " + categoryId));
 
         // Update the category entity object and save into database table - categories
         category.setName(categoryDto.name());
@@ -64,7 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         // Check if category given exist in database
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(()-> new RuntimeException("Category not found with id! " + categoryId));
+                .orElseThrow(()-> new ResourceNotFoundException("Category not found with id: " + categoryId));
 
         categoryRepository.delete(category);
     }
