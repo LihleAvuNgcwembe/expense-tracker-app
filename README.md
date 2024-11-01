@@ -12,3 +12,4 @@ Requirement 3 - Exception handling:
 The REST API should return the proper error response.
 
 Requirement 4 - REST API Documentation:
+Add open API to use swagger UI to automate documentation 
